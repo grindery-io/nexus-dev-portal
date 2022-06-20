@@ -24,7 +24,7 @@ function Header() {
         backgroundColor: '#0B0D17'
       }}
     >
-      <Container maxWidth="xl" sx={{ padding: '0px!important', height: '100%' }}>
+      <Container sx={{ padding: '0px!important', height: '100%', maxWidth: '100%!important' }}>
         <Toolbar sx={{ height: '92px' }} disableGutters>
           <LogoHeader />
           <ListHeader todoList={headerOptions} />

@@ -1,6 +1,7 @@
 import React from 'react'
 import { IconButton, Button, MenuItem, Menu, Box, Typography } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
+import { Link } from 'react-router-dom'
 
 type TList = {
   name: string
@@ -9,6 +10,18 @@ type TList = {
 
 interface TListMenu {
   todoList: TList[]
+}
+
+const styleList = {
+  fontFamily: 'Roboto',
+  fontStyle: 'normal',
+  fontWeight: '700',
+  fontSize: '16px',
+  lineHeight: '150%',
+  color: '#FFFFFF',
+  my: 2,
+  display: 'block',
+  textTransform: 'none'
 }
 
 function ListHeader(props: TListMenu): React.ReactElement {
@@ -60,17 +73,22 @@ function ListHeader(props: TListMenu): React.ReactElement {
           ))}
         </Menu>
       </Box>
-      <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: {
+            xs: 'none',
+            md: 'flex',
+            '& > a': { display: 'contents', textDecoration: 'none' }
+          }
+        }}
+      >
         {props.todoList.map(page => (
-          <Button
-            component={'a'}
-            href={page.link}
-            key={page.name}
-            onClick={handleCloseNavMenu}
-            sx={{ my: 2, color: 'white', display: 'block', textTransform: 'none' }}
-          >
-            {page.name}
-          </Button>
+          <Link key={page.name} to={page.link}>
+            <Button component={'div'} onClick={handleCloseNavMenu} sx={styleList}>
+              {page.name}
+            </Button>
+          </Link>
         ))}
       </Box>
     </Box>
