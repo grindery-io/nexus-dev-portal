@@ -2,6 +2,7 @@ import React from 'react'
 import Connectors from './Connectors'
 import SideBar from './SideBar'
 import History from './History'
+import CDS from './CDS'
 import { Box } from '@mui/material'
 import { Routes, Route } from 'react-router-dom'
 
@@ -67,11 +68,21 @@ function Container() {
     )
   }
 
+  const CdsEditor = () => {
+    return (
+      <>
+        <SideBar SideBarList={SideBarList} updateSelectedItem={updateSelectedItem} />
+        <CDS />
+      </>
+    )
+  }
+
   return (
     <Box component={'div'} sx={{ display: 'flex', gap: '40px' }}>
       <Routes>
         <Route path="/" element={<Connectors />} />
         <Route path={'history'} element={historyPage()} />
+        <Route path={'cds'} element={CdsEditor()} />
       </Routes>
     </Box>
   )

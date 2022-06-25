@@ -161,7 +161,7 @@ function SideBar({ SideBarList, updateSelectedItem }: ListProps) {
           boxSizing: 'border-box',
           width: '375px',
           position: 'relative',
-          height: 'calc( 100vh - 92px)',
+          height: '100%',
           backgroundColor: '#F4F5F7'
         }
       }}
