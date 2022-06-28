@@ -2,18 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Box, TextField, Typography } from '@mui/material'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { AutoCompleteInput, InputBox, Button } from 'grindery-ui'
+import { AutoCompleteInput, InputBox, Button, PaperBox } from 'grindery-ui'
 import { getABI } from '../../../services/getAbi'
 import { getCDS } from '../../../services/convertABI'
-
-interface typeCDS {
-  key: string
-  name: string
-  version: string
-  platformVersion: string
-  triggers: any
-  actions: any
-}
+import ReactJson from 'react-json-view'
 
 function CDS() {
   const options = [
@@ -35,9 +27,10 @@ function CDS() {
   ]
 
   const [blockchain, setBlockchain] = useState<string>('')
+  const [currentStep, setcurrentStep] = useState(0)
   const [addressContract, setContractAddress] = useState<string>('')
   const [abiValue, setAbiValue] = useState<string>('')
-  const [cdsValue, setCdsValue] = useState<typeCDS | string>('')
+  const [cdsValue, setCdsValue] = useState<string>(' ')
 
   const handleChange = (value: string) => {
     setBlockchain(value)
@@ -50,6 +43,18 @@ function CDS() {
     setAbiValue(e.target.value)
   }
 
+  const addValue = (value: object) => {
+    setCdsValue(JSON.stringify(value))
+  }
+
+  const editValue = (value: object) => {
+    setCdsValue(JSON.stringify(value))
+  }
+
+  const deleteValue = (value: object) => {
+    setCdsValue(JSON.stringify(value))
+  }
+
   useEffect(() => {
     if (blockchain !== '') {
       getABI({ blockchain, addressContract }).then(v => {
@@ -59,7 +64,7 @@ function CDS() {
   }, [addressContract, blockchain])
 
   const handleClick = () => {
-    console.log('adsasd')
+    setcurrentStep(1)
     const result = getCDS(abiValue)
     setCdsValue(JSON.stringify(result, null, 2))
   }
@@ -72,59 +77,104 @@ function CDS() {
       >
         CDS
       </Typography>
-      <Box
-        component={'div'}
-        sx={{ display: 'flex', marginTop: '40px', gap: '40px', '& > div': { width: '50%' } }}
-      >
-        <Box sx={{ textarea: { height: '200px!important' } }}>
-          <AutoCompleteInput
-            options={options}
-            label={'Select Blockchanin'}
-            value={blockchain}
-            placeholder={'Search for an Blockchain'}
-            onChange={(v: string) => handleChange(v)}
-            required={true}
-          ></AutoCompleteInput>
 
-          <InputBox
-            type={'text'}
-            value={addressContract}
-            onChange={(v: string) => setContractAddress(v)}
-            label="Smart Contract Address"
-            required={true}
-          ></InputBox>
+      {currentStep === 0 ? (
+        <Box
+          component={'div'}
+          sx={{
+            display: 'flex',
+            marginTop: '40px',
+            padding: '0px 60px 40px 0px',
+            '& > div': { width: '100%' }
+          }}
+        >
+          <Box sx={{ textarea: { height: '200px!important' } }}>
+            <AutoCompleteInput
+              options={options}
+              label={'Select Blockchanin'}
+              value={blockchain}
+              placeholder={'Search for an Blockchain'}
+              onChange={(v: string) => handleChange(v)}
+              required={true}
+            ></AutoCompleteInput>
 
-          <TextField
-            fullWidth
-            placeholder={'Hello'}
-            multiline
-            onChange={e => handleChangeInput(e)}
-            value={abiValue}
-            rows={3}
-            maxRows={10}
-          />
-          <Button
-            value={'Generate CDS'}
-            variant="contained"
-            color="secondary"
-            size="large"
-            loading={true}
-            onClick={handleClick}
-          ></Button>
+            <InputBox
+              type={'text'}
+              value={addressContract}
+              onChange={(v: string) => setContractAddress(v)}
+              label="Smart Contract Address"
+              required={true}
+            ></InputBox>
+
+            <TextField
+              fullWidth
+              placeholder={'ABI Json'}
+              multiline
+              onChange={e => handleChangeInput(e)}
+              value={abiValue}
+              rows={3}
+              maxRows={10}
+            />
+            <Button
+              value={'Generate CDS'}
+              variant="contained"
+              color="secondary"
+              size="large"
+              loading={true}
+              onClick={handleClick}
+            ></Button>
+          </Box>
         </Box>
-
-        <Box sx={{ textarea: { height: '400px!important' } }}>
-          <TextField
-            fullWidth
-            placeholder={'CDS JSON'}
-            multiline
-            value={cdsValue}
-            disabled
-            rows={3}
-            maxRows={10}
-          />
+      ) : (
+        <Box
+          component={'div'}
+          sx={{ display: 'flex', marginTop: '40px', gap: '32px', ' & > div ': { width: '45%' } }}
+        >
+          <Box
+            component={'div'}
+            sx={{
+              '.react-json-view': { height: '100%', overflow: 'scroll' },
+              height: '400px',
+              overflow: 'hidden'
+            }}
+          >
+            <Typography
+              variant="h3"
+              sx={{
+                fontSize: '14px',
+                fontStyle: 'normal',
+                fontWeight: '400',
+                lineHeight: '150%',
+                marginBottom: '4px'
+              }}
+            >
+              CDS JSon
+            </Typography>
+            <ReactJson
+              src={JSON.parse(cdsValue)}
+              onAdd={add => addValue(add.updated_src)}
+              onEdit={edit => editValue(edit.updated_src)}
+              onDelete={edit => deleteValue(edit.updated_src)}
+              theme={'monokai'}
+            />
+          </Box>
+          <Box component={'div'} sx={{ '.MuiPaper-root': { height: '220px', width: '100%' } }}>
+            <Typography
+              variant="h3"
+              sx={{
+                fontSize: '14px',
+                fontStyle: 'normal',
+                fontWeight: '400',
+                lineHeight: '150%',
+                marginBottom: '4px'
+              }}
+            >
+              Preview
+            </Typography>
+            <PaperBox></PaperBox>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   )
 }

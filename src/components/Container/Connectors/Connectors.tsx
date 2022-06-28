@@ -23,13 +23,13 @@ interface ConnectorsInterface {
 const VALUES_CONNECTORS = [
   {
     icon: './assets/images/connector.svg',
-    name: 'Filename 1',
+    name: 'Connector 1',
     version: '1.0.0',
     status: 'Active'
   },
   {
     icon: './assets/images/connector.svg',
-    name: 'Filename 2',
+    name: 'Connector 2',
     version: '1.0.1',
     status: 'Active'
   }

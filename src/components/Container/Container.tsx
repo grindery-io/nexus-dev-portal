@@ -32,6 +32,10 @@ const SideBarList = [
       },
       {
         name: 'History',
+        seleted: false
+      },
+      {
+        name: 'CDS Editor',
         seleted: true
       }
     ]

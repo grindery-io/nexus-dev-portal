@@ -103,7 +103,7 @@ function SideBar({ SideBarList, updateSelectedItem }: ListProps) {
             color: '#141416'
           }}
         >
-          {'Filename 1'}
+          {'Connector 1'}
         </Typography>
       </Box>
       <Divider />
