@@ -5,7 +5,7 @@ import { Box, TextField, Typography } from '@mui/material'
 import { AutoCompleteInput, InputBox, Button, PaperBox } from 'grindery-ui'
 import { getABI } from '../../../services/getAbi'
 import { getCDS } from '../../../services/convertABI'
-import ReactJson from 'react-json-view'
+import ReactJson from '@silizia/react-json-view'
 
 function CDS() {
   const options = [
@@ -128,12 +128,37 @@ function CDS() {
       ) : (
         <Box
           component={'div'}
-          sx={{ display: 'flex', marginTop: '40px', gap: '32px', ' & > div ': { width: '45%' } }}
+          sx={{
+            display: 'flex',
+            marginTop: '40px',
+            gap: '32px',
+            borderRadius: '5px',
+            ' & > div ': { width: '45%', borderRadius: '5px' }
+          }}
         >
           <Box
             component={'div'}
             sx={{
-              '.react-json-view': { height: '100%', overflow: 'scroll' },
+              '.react-json-view': {
+                height: '100%',
+                overflow: 'scroll',
+                padding: '10px',
+                borderRadius: '5px',
+                '&::-webkit-scrollbar': {
+                  width: '6px',
+                  marginRight: '10px'
+                },
+                '&::-webkit-scrollbar-track': {
+                  boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                  webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#898989',
+                  borderRadius: '10px',
+                  height: '96px',
+                  padding: '10px'
+                }
+              },
               height: '400px',
               overflow: 'hidden'
             }}
