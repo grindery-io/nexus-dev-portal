@@ -103,7 +103,7 @@ function SideBar({ SideBarList, updateSelectedItem }: ListProps) {
             color: '#141416'
           }}
         >
-          {'Connector 1'}
+          {'MolochDAO'}
         </Typography>
       </Box>
       <Divider />

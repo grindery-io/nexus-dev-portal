@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, TextField, Typography } from '@mui/material'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { AutoCompleteInput, InputBox, Button, PaperBox } from 'grindery-ui'
+import { AutoCompleteInput, InputBox, Button, PaperBox, SelectInput } from 'grindery-ui'
 import { getABI } from '../../../services/getAbi'
 import { getCDS } from '../../../services/convertABI'
 import ReactJson from '@silizia/react-json-view'
@@ -31,6 +31,12 @@ function CDS() {
   const [addressContract, setContractAddress] = useState<string>('')
   const [abiValue, setAbiValue] = useState<string>('')
   const [cdsValue, setCdsValue] = useState<string>(' ')
+  const [connectorOptions, setConnectorOptions] = useState<any[]>([])
+  const [connector, setConnector] = useState<string>('')
+  const [trigger, setTrigger] = useState<string>('')
+  const [actions, setActions] = useState<string>('')
+  const [actionOptions, setActionOptions] = useState<any[]>([])
+  const [triggresOptions, setTriggresOptions] = useState<any[]>([])
 
   const handleChange = (value: string) => {
     setBlockchain(value)
@@ -43,16 +49,67 @@ function CDS() {
     setAbiValue(e.target.value)
   }
 
-  const addValue = (value: object) => {
-    setCdsValue(JSON.stringify(value))
+  const updateData = (value: any) => {
+    const key = value.key
+    const name = value.name
+
+    const iconLogo = options.filter(item => item.value === blockchain)[0].icon
+
+    console.log(iconLogo)
+
+    const actionOptionsValues = value.actions.map((action: any) => ({
+      value: action.key,
+      label: action.display?.label,
+      icon: iconLogo,
+      description: action.display?.description
+    })) as any[]
+
+    const triggresOptionsValues = value.triggers.map((trigger: any) => ({
+      value: trigger.key,
+      label: trigger.display?.label,
+      icon: iconLogo,
+      description: trigger.display?.description
+    })) as any[]
+
+    setConnectorOptions([
+      {
+        value: key,
+        label: name,
+        icon: iconLogo
+      }
+    ])
+
+    setActionOptions(actionOptionsValues)
+
+    setTriggresOptions(triggresOptionsValues)
   }
 
-  const editValue = (value: object) => {
+  const addValue = (value: object) => {
     setCdsValue(JSON.stringify(value))
+    updateData(value)
+  }
+
+  const editValue = (value: any) => {
+    console.log(value)
+    setCdsValue(JSON.stringify(value))
+    updateData(value)
   }
 
   const deleteValue = (value: object) => {
     setCdsValue(JSON.stringify(value))
+    updateData(value)
+  }
+
+  const handleConnector = (value: string) => {
+    setConnector(value)
+  }
+
+  const handleActionChange = (value: string) => {
+    setActions(value)
+  }
+
+  const handleTriggressChange = (value: string) => {
+    setTrigger(value)
   }
 
   useEffect(() => {
@@ -67,6 +124,7 @@ function CDS() {
     setcurrentStep(1)
     const result = getCDS(abiValue)
     setCdsValue(JSON.stringify(result, null, 2))
+    updateData(result)
   }
 
   return (
@@ -159,7 +217,7 @@ function CDS() {
                   padding: '10px'
                 }
               },
-              height: '400px',
+              height: '500px',
               overflow: 'hidden'
             }}
           >
@@ -183,7 +241,7 @@ function CDS() {
               theme={'monokai'}
             />
           </Box>
-          <Box component={'div'} sx={{ '.MuiPaper-root': { height: '220px', width: '100%' } }}>
+          <Box component={'div'} sx={{ '.MuiPaper-root': { width: '100%' } }}>
             <Typography
               variant="h3"
               sx={{
@@ -196,7 +254,38 @@ function CDS() {
             >
               Preview
             </Typography>
-            <PaperBox></PaperBox>
+            <PaperBox>
+              <AutoCompleteInput
+                label="Connector..."
+                size="full"
+                placeholder="Select a Trigger"
+                onChange={handleConnector}
+                options={connectorOptions}
+                value={connector}
+              />
+
+              <div style={{ marginTop: 10 }}>
+                <SelectInput
+                  label="Triggers...."
+                  type="default"
+                  placeholder="Select an Triggres"
+                  onChange={handleTriggressChange}
+                  options={triggresOptions}
+                  value={trigger}
+                />
+              </div>
+
+              <div style={{ marginTop: 10 }}>
+                <SelectInput
+                  label="Actions...."
+                  type="default"
+                  placeholder="Select an Action"
+                  onChange={handleActionChange}
+                  options={actionOptions}
+                  value={actions}
+                />
+              </div>
+            </PaperBox>
           </Box>
         </Box>
       )}
