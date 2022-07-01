@@ -59,14 +59,21 @@ interface ListItemProps {
 }
 
 function Container() {
+  const [openDrawel, setOpenDrawel] = React.useState<boolean>(true)
+
   const updateSelectedItem = (values: ListItemProps[]) => {
     console.log(values)
+    console.log(openDrawel)
   }
 
   const historyPage = () => {
     return (
       <>
-        <SideBar SideBarList={SideBarList} updateSelectedItem={updateSelectedItem} />
+        <SideBar
+          SideBarList={SideBarList}
+          setOpenDrawel={setOpenDrawel}
+          updateSelectedItem={updateSelectedItem}
+        />
         <History />
       </>
     )
@@ -75,8 +82,12 @@ function Container() {
   const CdsEditor = () => {
     return (
       <>
-        <SideBar SideBarList={SideBarList} updateSelectedItem={updateSelectedItem} />
-        <CDS />
+        <SideBar
+          SideBarList={SideBarList}
+          setOpenDrawel={setOpenDrawel}
+          updateSelectedItem={updateSelectedItem}
+        />
+        <CDS openDrawel={openDrawel} />
       </>
     )
   }

@@ -1,7 +1,7 @@
 import React from 'react'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { Drawer, Button } from 'grindery-ui'
+import { Drawer, Button, SelectSimple } from 'grindery-ui'
 import {
   List,
   ListItemButton,
@@ -9,8 +9,11 @@ import {
   Divider,
   Box,
   Typography,
-  Collapse
+  Collapse,
+  IconButton
 } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import VerticalAlignTopIcon from '@mui/icons-material/VerticalAlignTop'
 
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 
@@ -58,14 +61,32 @@ interface ListItemProps {
 interface ListProps {
   SideBarList: ListItemProps[]
   updateSelectedItem: (values: ListItemProps[]) => void
+  setOpenDrawel: (value: boolean) => void
 }
 
-function SideBar({ SideBarList, updateSelectedItem }: ListProps) {
+function SideBar({ SideBarList, updateSelectedItem, setOpenDrawel }: ListProps) {
   const [open, setOpen] = React.useState(true)
+  const [openSidebar, setOpenSidebar] = React.useState(true)
   const [listValues] = React.useState<ListProps['SideBarList']>(SideBarList)
+  const [version, setVersion] = React.useState<string>('1.0.0')
+
+  const versionOptions = [
+    { label: '1.0.0', value: '1.0.0' },
+    { label: '1.0.1', value: '1.0.1' }
+  ]
 
   const handleClick = () => {
     setOpen(!open)
+  }
+
+  const handleDrawerOpen = () => {
+    setOpenSidebar(true)
+    setOpenDrawel(true)
+  }
+
+  const handleDrawerClose = () => {
+    setOpenSidebar(false)
+    setOpenDrawel(false)
   }
 
   const handleClickOnItem = () => {
@@ -105,6 +126,54 @@ function SideBar({ SideBarList, updateSelectedItem }: ListProps) {
         >
           {'MolochDAO'}
         </Typography>
+
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerClose}
+          edge="start"
+          sx={{
+            transform: 'rotate(-90deg)',
+            color: '#979797',
+            mr: 2,
+            marginLeft: 'auto',
+            marginTop: '-40px',
+            marginRight: '0px',
+            ...(openSidebar && { display: 'block' })
+          }}
+        >
+          <VerticalAlignTopIcon />
+        </IconButton>
+      </Box>
+      <Divider />
+      <Box
+        component={'div'}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '20px',
+          padding: '20px',
+          '& .MuiOutlinedInput-root': { width: '90px', background: '#fff' }
+        }}
+      >
+        <Typography
+          variant="subtitle2"
+          sx={{
+            fontStyle: 'normal',
+            fontWeight: '400',
+            fontSize: '16px',
+            lineHeight: '19px',
+            color: '#141416',
+            opacity: '0.5'
+          }}
+        >
+          {'Version'}
+        </Typography>
+        <SelectSimple
+          options={versionOptions}
+          onChange={(v: string) => setVersion(v)}
+          value={version}
+        />
       </Box>
       <Divider />
       <List>
@@ -153,22 +222,40 @@ function SideBar({ SideBarList, updateSelectedItem }: ListProps) {
   )
 
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        display: { xs: 'none', sm: 'block' },
-        '& .MuiDrawer-paper': {
-          boxSizing: 'border-box',
-          width: '375px',
-          position: 'relative',
-          height: '100%',
-          backgroundColor: '#F4F5F7'
-        }
-      }}
-      open
-    >
-      {drawer}
-    </Drawer>
+    <>
+      <IconButton
+        color="inherit"
+        aria-label="open drawer"
+        onClick={handleDrawerOpen}
+        edge="start"
+        sx={{
+          position: 'absolute',
+          left: '24px',
+          color: '#979797',
+          marginTop: '26px',
+          ...(openSidebar && { display: 'none' })
+        }}
+      >
+        <MenuIcon />
+      </IconButton>
+      <Drawer
+        variant="persistent"
+        sx={{
+          display: { xs: 'none', sm: 'block' },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: '375px',
+            position: 'relative',
+            height: '100%',
+            backgroundColor: '#F4F5F7',
+            ...(!openSidebar && { display: 'none!important' })
+          }
+        }}
+        open={openSidebar}
+      >
+        {drawer}
+      </Drawer>
+    </>
   )
 }
 

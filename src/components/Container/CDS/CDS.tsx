@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Box, TextField, Typography } from '@mui/material'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -7,7 +7,9 @@ import { getABI } from '../../../services/getAbi'
 import { getCDS } from '../../../services/convertABI'
 import ReactJson from '@silizia/react-json-view'
 
-function CDS() {
+import SvgIcon from '@mui/material/SvgIcon'
+
+function CDS({ openDrawel }: any) {
   const options = [
     {
       label: 'Ethereum (Mainnet)',
@@ -15,7 +17,7 @@ function CDS() {
       icon: './assets/images/ethereum.svg'
     },
     {
-      label: 'xDai',
+      label: 'Gnosis',
       value: 'xdai',
       icon: './assets/images/xdai.svg'
     },
@@ -37,6 +39,14 @@ function CDS() {
   const [actions, setActions] = useState<string>('')
   const [actionOptions, setActionOptions] = useState<any[]>([])
   const [triggresOptions, setTriggresOptions] = useState<any[]>([])
+  /* const [initialPos, setInitialPos] = React.useState<number>(0) */
+  const myRef = useRef(null)
+
+  const styleCursor = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 
   const handleChange = (value: string) => {
     setBlockchain(value)
@@ -54,8 +64,6 @@ function CDS() {
     const name = value.name
 
     const iconLogo = options.filter(item => item.value === blockchain)[0].icon
-
-    console.log(iconLogo)
 
     const actionOptionsValues = value.actions.map((action: any) => ({
       value: action.key,
@@ -112,6 +120,21 @@ function CDS() {
     setTrigger(value)
   }
 
+  /* const initial = (e: React.DragEvent<HTMLDivElement>) => {
+    setInitialPos(e.clientX)
+  } */
+
+  /* const resize = (e: React.DragEvent<HTMLDivElement>) => {
+    if (e.clientX !== 0) {
+      const elm = document.querySelector<HTMLElement>('.editor')!
+      const width = 50 - Math.floor((e.clientX - initialPos) * 0.1)
+      console.log(width)
+      const pre = document.querySelector<HTMLElement>('.preview')!
+      elm.style.width = width + '%'
+      pre.style.width = 100 - 15 - width + '%'
+    }
+  } */
+
   useEffect(() => {
     if (blockchain !== '') {
       getABI({ blockchain, addressContract }).then(v => {
@@ -128,7 +151,10 @@ function CDS() {
   }
 
   return (
-    <Box component={'div'} sx={{ width: '1024px', margin: '60px auto' }}>
+    <Box
+      component={'div'}
+      sx={{ width: '100%', margin: '60px auto', ...(!openDrawel && { padding: '0px 80px' }) }}
+    >
       <Typography
         variant="h3"
         sx={{ fontSize: '25px', fontStyle: 'normal', fontWeight: '700', lineHeight: '120%' }}
@@ -190,13 +216,15 @@ function CDS() {
             display: 'flex',
             marginTop: '40px',
             gap: '32px',
-            borderRadius: '5px',
-            ' & > div ': { width: '45%', borderRadius: '5px' }
+            borderRadius: '5px'
           }}
         >
           <Box
             component={'div'}
+            className="editor"
             sx={{
+              width: '50%',
+              borderRadius: '5px',
               '.react-json-view': {
                 height: '100%',
                 overflow: 'scroll',
@@ -224,7 +252,7 @@ function CDS() {
             <Typography
               variant="h3"
               sx={{
-                fontSize: '14px',
+                fontSize: '16px',
                 fontStyle: 'normal',
                 fontWeight: '400',
                 lineHeight: '150%',
@@ -241,11 +269,27 @@ function CDS() {
               theme={'monokai'}
             />
           </Box>
-          <Box component={'div'} sx={{ '.MuiPaper-root': { width: '100%' } }}>
+          <div style={styleCursor}>
+            <SvgIcon ref={myRef} sx={{ cursor: 'col-resize' }}>
+              <path
+                d="M10 20L10 4C10 3.73478 9.89464 3.48043 9.70711 3.29289C9.51957 3.10536 9.26522 3 9 3C8.73478 3 8.48043 3.10536 8.29289 3.29289C8.10536 3.48043 8 3.73478 8 4L8 20C8 20.2652 8.10536 20.5196 8.29289 20.7071C8.48043 20.8946 8.73478 21 9 21C9.26522 21 9.51957 20.8946 9.70711 20.7071C9.89464 20.5196 10 20.2652 10 20Z"
+                fill="#898989"
+              />
+              <path
+                d="M14 4L14 20C14 20.2652 14.1054 20.5196 14.2929 20.7071C14.4804 20.8946 14.7348 21 15 21C15.2652 21 15.5196 20.8946 15.7071 20.7071C15.8946 20.5196 16 20.2652 16 20L16 4C16 3.73478 15.8946 3.48043 15.7071 3.29289C15.5196 3.10536 15.2652 3 15 3C14.7348 3 14.4804 3.10536 14.2929 3.29289C14.1054 3.48043 14 3.73478 14 4Z"
+                fill="#898989"
+              />
+            </SvgIcon>
+          </div>
+          <Box
+            component={'div'}
+            className="preview"
+            sx={{ width: '35%', '.MuiPaper-root': { width: '100%' } }}
+          >
             <Typography
               variant="h3"
               sx={{
-                fontSize: '14px',
+                fontSize: '16px',
                 fontStyle: 'normal',
                 fontWeight: '400',
                 lineHeight: '150%',
