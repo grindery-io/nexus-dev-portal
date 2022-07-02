@@ -172,7 +172,12 @@ function CDS({ openDrawel }: any) {
             '& > div': { width: '100%' }
           }}
         >
-          <Box sx={{ textarea: { height: '200px!important' } }}>
+          <Box
+            sx={{
+              textarea: { height: '200px!important' },
+              span: { fontSize: '16px' }
+            }}
+          >
             <AutoCompleteInput
               options={options}
               label={'Select Blockchanin'}
@@ -256,7 +261,8 @@ function CDS({ openDrawel }: any) {
                 fontStyle: 'normal',
                 fontWeight: '400',
                 lineHeight: '150%',
-                marginBottom: '4px'
+                marginBottom: '4px',
+                color: '#0B0D17'
               }}
             >
               CDS JSon
@@ -293,7 +299,8 @@ function CDS({ openDrawel }: any) {
                 fontStyle: 'normal',
                 fontWeight: '400',
                 lineHeight: '150%',
-                marginBottom: '4px'
+                marginBottom: '4px',
+                color: '#0B0D17'
               }}
             >
               Preview
