@@ -12,30 +12,37 @@ const SideBarList = [
     subList: [
       {
         name: 'Version',
+        url: 'version',
         seleted: false
       },
       {
         name: 'Sharing',
+        url: '/sharing',
         seleted: false
       },
       {
         name: 'Manage Team',
+        url: '/manage-team',
         seleted: false
       },
       {
         name: 'Analitycs',
+        url: '/analytics',
         seleted: false
       },
       {
         name: 'Monitoring',
+        url: '/monitoring',
         seleted: false
       },
       {
         name: 'History',
+        url: '/history',
         seleted: false
       },
       {
         name: 'CDS Editor',
+        url: '/cds',
         seleted: true
       }
     ]
@@ -50,28 +57,15 @@ const SideBarList = [
   }
 ]
 
-interface ListItemProps {
-  name: string
-  subList: Array<{
-    name: string
-    seleted: boolean
-  }>
-}
-
-function Container() {
-  const [openDrawel, setOpenDrawel] = React.useState<boolean>(true)
-
-  const updateSelectedItem = (values: ListItemProps[]) => {
-    console.log(values)
-    console.log(openDrawel)
-  }
+function Container({ openDrawel }: { openDrawel: boolean }) {
+  const updateSelectedItem = (values: string) => {}
 
   const historyPage = () => {
     return (
       <>
         <SideBar
           SideBarList={SideBarList}
-          setOpenDrawel={setOpenDrawel}
+          openDrawel={openDrawel}
           updateSelectedItem={updateSelectedItem}
         />
         <History />
@@ -84,7 +78,7 @@ function Container() {
       <>
         <SideBar
           SideBarList={SideBarList}
-          setOpenDrawel={setOpenDrawel}
+          openDrawel={openDrawel}
           updateSelectedItem={updateSelectedItem}
         />
         <CDS openDrawel={openDrawel} />
@@ -93,7 +87,7 @@ function Container() {
   }
 
   return (
-    <Box component={'div'} sx={{ display: 'flex', gap: '40px' }}>
+    <Box component={'div'} sx={{ display: 'flex' }}>
       <Routes>
         <Route path="/" element={<Connectors />} />
         <Route path={'history'} element={historyPage()} />

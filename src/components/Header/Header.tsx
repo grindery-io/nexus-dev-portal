@@ -12,7 +12,13 @@ const profileOptions = {
   avatar: 'https://i.pravatar.cc/300'
 }
 
-function Header() {
+function Header({
+  openDrawel,
+  setOpenDrawel
+}: {
+  openDrawel: boolean
+  setOpenDrawel: (openDrawel: boolean) => void
+}): React.ReactElement {
   return (
     <AppBar
       position="static"
@@ -26,7 +32,7 @@ function Header() {
     >
       <Container sx={{ padding: '0px!important', height: '100%', maxWidth: '100%!important' }}>
         <Toolbar sx={{ height: '92px' }} disableGutters>
-          <LogoHeader />
+          <LogoHeader openDrawel={openDrawel} setOpenDrawel={setOpenDrawel} />
           <ListHeader todoList={headerOptions} />
           <IconProfile profileOptions={profileOptions} />
         </Toolbar>

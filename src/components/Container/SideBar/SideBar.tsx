@@ -9,11 +9,9 @@ import {
   Divider,
   Box,
   Typography,
-  Collapse,
-  IconButton
+  Collapse
 } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
-import VerticalAlignTopIcon from '@mui/icons-material/VerticalAlignTop'
+import { NavLink } from 'react-router-dom'
 
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 
@@ -55,19 +53,18 @@ interface ListItemProps {
   subList: Array<{
     name: string
     seleted: boolean
+    url: string
   }>
 }
 
 interface ListProps {
   SideBarList: ListItemProps[]
-  updateSelectedItem: (values: ListItemProps[]) => void
-  setOpenDrawel: (value: boolean) => void
+  updateSelectedItem: (values: string) => void
+  openDrawel: boolean
 }
 
-function SideBar({ SideBarList, updateSelectedItem, setOpenDrawel }: ListProps) {
+function SideBar({ SideBarList, updateSelectedItem, openDrawel }: ListProps) {
   const [open, setOpen] = React.useState(true)
-  const [openSidebar, setOpenSidebar] = React.useState(true)
-  const [listValues] = React.useState<ListProps['SideBarList']>(SideBarList)
   const [version, setVersion] = React.useState<string>('1.0.0')
 
   const versionOptions = [
@@ -79,26 +76,19 @@ function SideBar({ SideBarList, updateSelectedItem, setOpenDrawel }: ListProps) 
     setOpen(!open)
   }
 
-  const handleDrawerOpen = () => {
-    setOpenSidebar(true)
-    setOpenDrawel(true)
-  }
-
-  const handleDrawerClose = () => {
-    setOpenSidebar(false)
-    setOpenDrawel(false)
-  }
-
-  const handleClickOnItem = () => {
-    console.log('Clicked')
-    updateSelectedItem(listValues)
+  const handleClickOnItem = (itemName: string) => {
+    updateSelectedItem(itemName)
   }
 
   const drawer = (
     <div>
       <Box
         component={'div'}
-        sx={{ display: 'flex', alignItems: 'center', padding: '20px 20px 40px 20px' }}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          padding: '20px 20px 40px 20px'
+        }}
       >
         <Box
           component={'div'}
@@ -126,24 +116,6 @@ function SideBar({ SideBarList, updateSelectedItem, setOpenDrawel }: ListProps) 
         >
           {'MolochDAO'}
         </Typography>
-
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerClose}
-          edge="start"
-          sx={{
-            transform: 'rotate(-90deg)',
-            color: '#979797',
-            mr: 2,
-            marginLeft: 'auto',
-            marginTop: '-40px',
-            marginRight: '0px',
-            ...(openSidebar && { display: 'block' })
-          }}
-        >
-          <VerticalAlignTopIcon />
-        </IconButton>
       </Box>
       <Divider />
       <Box
@@ -188,18 +160,33 @@ function SideBar({ SideBarList, updateSelectedItem, setOpenDrawel }: ListProps) 
               {open ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
+              <List
+                component="div"
+                disablePadding
+                sx={{
+                  a: { textDecoration: 'none' },
+                  '& > .active': { backgroundColor: '#FFB930' }
+                }}
+              >
                 {listItem.subList.map(subListItem => (
-                  <ListItemButton
+                  <NavLink
+                    style={isActive => ({
+                      display: 'block'
+                    })}
+                    to={subListItem.url}
                     key={subListItem.name}
-                    sx={subListItem.seleted ? { pl: 4, backgroundColor: '#FFB930' } : { pl: 4 }}
                   >
-                    <ListItemText
-                      onClick={handleClickOnItem}
-                      sx={{ ' & > span': styleSubList }}
-                      primary={subListItem.name}
-                    />
-                  </ListItemButton>
+                    <ListItemButton
+                      key={subListItem.name}
+                      sx={subListItem.seleted ? { pl: 4 } : { pl: 4 }}
+                    >
+                      <ListItemText
+                        onClick={() => handleClickOnItem(subListItem.name)}
+                        sx={{ ' & > span': styleSubList }}
+                        primary={subListItem.name}
+                      />
+                    </ListItemButton>
+                  </NavLink>
                 ))}
               </List>
             </Collapse>
@@ -223,35 +210,20 @@ function SideBar({ SideBarList, updateSelectedItem, setOpenDrawel }: ListProps) 
 
   return (
     <>
-      <IconButton
-        color="inherit"
-        aria-label="open drawer"
-        onClick={handleDrawerOpen}
-        edge="start"
-        sx={{
-          position: 'absolute',
-          left: '24px',
-          color: '#979797',
-          marginTop: '26px',
-          ...(openSidebar && { display: 'none' })
-        }}
-      >
-        <MenuIcon />
-      </IconButton>
       <Drawer
         variant="persistent"
         sx={{
           display: { xs: 'none', sm: 'block' },
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
-            width: '375px',
+            width: '305px',
             position: 'relative',
             height: '100%',
             backgroundColor: '#F4F5F7',
-            ...(!openSidebar && { display: 'none!important' })
+            ...(!openDrawel && { display: 'none!important' })
           }
         }}
-        open={openSidebar}
+        open={openDrawel}
       >
         {drawer}
       </Drawer>

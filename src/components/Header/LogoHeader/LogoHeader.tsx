@@ -1,7 +1,14 @@
 import React from 'react'
-import { Typography, Box } from '@mui/material'
+import { Typography, Box, IconButton } from '@mui/material'
 import { Link } from 'react-router-dom'
-function LogoHeader() {
+import VerticalAlignTopIcon from '@mui/icons-material/VerticalAlignTop'
+import MenuIcon from '@mui/icons-material/Menu'
+
+function LogoHeader({ openDrawel, setOpenDrawel }: any) {
+  const handleDrawerClose = () => {
+    setOpenDrawel(!openDrawel)
+  }
+
   return (
     <Box
       component={'div'}
@@ -13,6 +20,20 @@ function LogoHeader() {
         ' & > a': { display: 'contents', textDecoration: 'none' }
       }}
     >
+      <IconButton
+        color="inherit"
+        aria-label="open drawer"
+        onClick={handleDrawerClose}
+        edge="start"
+        sx={{
+          ...(openDrawel && {
+            transform: 'rotate(-90deg)',
+            color: '#FFF'
+          })
+        }}
+      >
+        {openDrawel ? <VerticalAlignTopIcon /> : <MenuIcon />}
+      </IconButton>
       <Link to="/">
         <img src={'./assets/images/grindery-iso.svg'} width={28} height={36} />
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>

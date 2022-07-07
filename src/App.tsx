@@ -4,11 +4,13 @@ import { Header, Container } from './components'
 import { BrowserRouter } from 'react-router-dom'
 
 function App() {
+  const [openDrawel, setOpenDrawel] = React.useState(true)
+
   return (
     <div className="App">
       <BrowserRouter>
-        <Header />
-        <Container />
+        <Header openDrawel={openDrawel} setOpenDrawel={setOpenDrawel} />
+        <Container openDrawel={openDrawel} />
       </BrowserRouter>
     </div>
   )

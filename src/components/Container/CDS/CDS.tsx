@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Box, TextField, Typography } from '@mui/material'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { AutoCompleteInput, InputBox, Button, PaperBox, SelectInput } from 'grindery-ui'
+import { AutoCompleteInput, InputBox, Button, SelectInput } from 'grindery-ui'
 import { getABI } from '../../../services/getAbi'
 import { getCDS } from '../../../services/convertABI'
 import ReactJson from '@silizia/react-json-view'
@@ -45,7 +45,8 @@ function CDS({ openDrawel }: any) {
   const styleCursor = {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '5%'
   }
 
   const handleChange = (value: string) => {
@@ -153,74 +154,78 @@ function CDS({ openDrawel }: any) {
   return (
     <Box
       component={'div'}
-      sx={{ width: '100%', margin: '60px auto', ...(!openDrawel && { padding: '0px 80px' }) }}
+      sx={{
+        width: '100%',
+        padding: '0px 40px',
+        ...(currentStep === 0 && { margin: '60px auto' })
+      }}
     >
-      <Typography
-        variant="h3"
-        sx={{ fontSize: '25px', fontStyle: 'normal', fontWeight: '700', lineHeight: '120%' }}
-      >
-        CDS
-      </Typography>
-
       {currentStep === 0 ? (
-        <Box
-          component={'div'}
-          sx={{
-            display: 'flex',
-            marginTop: '40px',
-            padding: '0px 60px 40px 0px',
-            '& > div': { width: '100%' }
-          }}
-        >
+        <>
+          <Typography
+            variant="h3"
+            sx={{ fontSize: '25px', fontStyle: 'normal', fontWeight: '700', lineHeight: '120%' }}
+          >
+            CDS
+          </Typography>
           <Box
+            component={'div'}
             sx={{
-              textarea: { height: '200px!important' },
-              span: { fontSize: '16px' }
+              display: 'flex',
+              marginTop: '40px',
+              padding: '0px 60px 40px 0px',
+              '& > div': { width: '100%' }
             }}
           >
-            <AutoCompleteInput
-              options={options}
-              label={'Select Blockchanin'}
-              value={blockchain}
-              placeholder={'Search for an Blockchain'}
-              onChange={(v: string) => handleChange(v)}
-              required={true}
-            ></AutoCompleteInput>
+            <Box
+              sx={{
+                textarea: { height: '200px!important' },
+                span: { fontSize: '16px' }
+              }}
+            >
+              <AutoCompleteInput
+                options={options}
+                label={'Select Blockchanin'}
+                value={blockchain}
+                placeholder={'Search for an Blockchain'}
+                onChange={(v: string) => handleChange(v)}
+                required={true}
+              ></AutoCompleteInput>
 
-            <InputBox
-              type={'text'}
-              value={addressContract}
-              onChange={(v: string) => setContractAddress(v)}
-              label="Smart Contract Address"
-              required={true}
-            ></InputBox>
+              <InputBox
+                type={'text'}
+                value={addressContract}
+                onChange={(v: string) => setContractAddress(v)}
+                label="Smart Contract Address"
+                required={true}
+              ></InputBox>
 
-            <TextField
-              fullWidth
-              placeholder={'ABI Json'}
-              multiline
-              onChange={e => handleChangeInput(e)}
-              value={abiValue}
-              rows={3}
-              maxRows={10}
-            />
-            <Button
-              value={'Generate CDS'}
-              variant="contained"
-              color="secondary"
-              size="large"
-              loading={true}
-              onClick={handleClick}
-            ></Button>
+              <TextField
+                fullWidth
+                placeholder={'ABI Json'}
+                multiline
+                onChange={e => handleChangeInput(e)}
+                value={abiValue}
+                rows={3}
+                maxRows={10}
+              />
+              <Button
+                value={'Generate CDS'}
+                variant="contained"
+                color="secondary"
+                size="large"
+                loading={true}
+                onClick={handleClick}
+              ></Button>
+            </Box>
           </Box>
-        </Box>
+        </>
       ) : (
         <Box
           component={'div'}
           sx={{
             display: 'flex',
             marginTop: '40px',
-            gap: '32px',
             borderRadius: '5px'
           }}
         >
@@ -228,7 +233,7 @@ function CDS({ openDrawel }: any) {
             component={'div'}
             className="editor"
             sx={{
-              width: '50%',
+              width: '55%',
               borderRadius: '5px',
               '.react-json-view': {
                 height: '100%',
@@ -250,7 +255,7 @@ function CDS({ openDrawel }: any) {
                   padding: '10px'
                 }
               },
-              height: '500px',
+              height: '100vh',
               overflow: 'hidden'
             }}
           >
@@ -290,7 +295,7 @@ function CDS({ openDrawel }: any) {
           <Box
             component={'div'}
             className="preview"
-            sx={{ width: '35%', '.MuiPaper-root': { width: '100%' } }}
+            sx={{ width: '40%', '.MuiPaper-root': { width: '100%' } }}
           >
             <Typography
               variant="h3"
@@ -305,38 +310,56 @@ function CDS({ openDrawel }: any) {
             >
               Preview
             </Typography>
-            <PaperBox>
-              <AutoCompleteInput
-                label="Connector..."
-                size="full"
-                placeholder="Select a Trigger"
-                onChange={handleConnector}
-                options={connectorOptions}
-                value={connector}
-              />
-
-              <div style={{ marginTop: 10 }}>
-                <SelectInput
-                  label="Triggers...."
-                  type="default"
-                  placeholder="Select an Triggres"
-                  onChange={handleTriggressChange}
-                  options={triggresOptions}
-                  value={trigger}
+            <Box
+              component={'div'}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                border: '1px solid #DCDCDC',
+                borderRadius: '5px',
+                height: 'calc( 100% - 30px)'
+              }}
+            >
+              <Box
+                component={'div'}
+                sx={{
+                  width: '335px',
+                  margin: '0 auto'
+                }}
+              >
+                <AutoCompleteInput
+                  label="Connector..."
+                  size="full"
+                  placeholder="Select a Trigger"
+                  onChange={handleConnector}
+                  options={connectorOptions}
+                  value={connector}
                 />
-              </div>
 
-              <div style={{ marginTop: 10 }}>
-                <SelectInput
-                  label="Actions...."
-                  type="default"
-                  placeholder="Select an Action"
-                  onChange={handleActionChange}
-                  options={actionOptions}
-                  value={actions}
-                />
-              </div>
-            </PaperBox>
+                <div style={{ marginTop: 10 }}>
+                  <SelectInput
+                    label="Triggers...."
+                    type="default"
+                    placeholder="Select an Triggres"
+                    onChange={handleTriggressChange}
+                    options={triggresOptions}
+                    value={trigger}
+                  />
+                </div>
+
+                <div style={{ marginTop: 10 }}>
+                  <SelectInput
+                    label="Actions...."
+                    type="default"
+                    placeholder="Select an Action"
+                    onChange={handleActionChange}
+                    options={actionOptions}
+                    value={actions}
+                  />
+                </div>
+              </Box>
+            </Box>
           </Box>
         </Box>
       )}
