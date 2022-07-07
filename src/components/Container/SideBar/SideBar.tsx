@@ -87,7 +87,7 @@ function SideBar({ SideBarList, updateSelectedItem, openDrawel }: ListProps) {
         sx={{
           display: 'flex',
           alignItems: 'center',
-          padding: '20px 20px 40px 20px'
+          padding: '20px'
         }}
       >
         <Box

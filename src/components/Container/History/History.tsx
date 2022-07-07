@@ -64,7 +64,7 @@ function History() {
   }, [])
 
   return (
-    <Box component={'div'} sx={{ width: '1024px', margin: '60px auto', padding: '0px 40px' }}>
+    <Box component={'div'} sx={{ width: '816px', margin: '60px auto' }}>
       <Typography
         variant="h3"
         sx={{ fontSize: '25px', fontStyle: 'normal', fontWeight: '700', lineHeight: '120%' }}

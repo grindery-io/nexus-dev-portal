@@ -46,7 +46,7 @@ function CDS({ openDrawel }: any) {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '5%'
+    width: '2%'
   }
 
   const handleChange = (value: string) => {
@@ -155,13 +155,11 @@ function CDS({ openDrawel }: any) {
     <Box
       component={'div'}
       sx={{
-        width: '100%',
-        padding: '0px 40px',
-        ...(currentStep === 0 && { margin: '60px auto' })
+        width: '100%'
       }}
     >
       {currentStep === 0 ? (
-        <>
+        <Box component={'div'} sx={{ width: '816px', margin: '60px auto' }}>
           <Typography
             variant="h3"
             sx={{ fontSize: '25px', fontStyle: 'normal', fontWeight: '700', lineHeight: '120%' }}
@@ -173,7 +171,6 @@ function CDS({ openDrawel }: any) {
             sx={{
               display: 'flex',
               marginTop: '40px',
-              padding: '0px 60px 40px 0px',
               '& > div': { width: '100%' }
             }}
           >
@@ -219,13 +216,13 @@ function CDS({ openDrawel }: any) {
               ></Button>
             </Box>
           </Box>
-        </>
+        </Box>
       ) : (
         <Box
           component={'div'}
           sx={{
             display: 'flex',
-            marginTop: '40px',
+            padding: '40px 20px 20px',
             borderRadius: '5px'
           }}
         >
@@ -233,7 +230,7 @@ function CDS({ openDrawel }: any) {
             component={'div'}
             className="editor"
             sx={{
-              width: '55%',
+              width: 'calc( 98% - 454px)',
               borderRadius: '5px',
               '.react-json-view': {
                 height: '100%',
@@ -295,7 +292,7 @@ function CDS({ openDrawel }: any) {
           <Box
             component={'div'}
             className="preview"
-            sx={{ width: '40%', '.MuiPaper-root': { width: '100%' } }}
+            sx={{ width: '454px', '.MuiPaper-root': { width: '100%' } }}
           >
             <Typography
               variant="h3"

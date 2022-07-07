@@ -1,7 +1,7 @@
 import React from 'react'
 import { IconButton, Button, MenuItem, Menu, Box, Typography } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 type TList = {
   name: string
@@ -79,16 +79,17 @@ function ListHeader(props: TListMenu): React.ReactElement {
           display: {
             xs: 'none',
             md: 'flex',
-            '& > a': { display: 'contents', textDecoration: 'none' }
+            '& > a': { display: 'block', textDecoration: 'none' },
+            '& > .active': { boxShadow: '0 4px 0 0 #FFF' }
           }
         }}
       >
         {props.todoList.map(page => (
-          <Link key={page.name} to={page.link}>
+          <NavLink key={page.name} to={page.link}>
             <Button component={'div'} onClick={handleCloseNavMenu} sx={styleList}>
               {page.name}
             </Button>
-          </Link>
+          </NavLink>
         ))}
       </Box>
     </Box>

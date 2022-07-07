@@ -57,7 +57,7 @@ function Connectors() {
   }, [])
 
   return (
-    <Box component={'div'} sx={{ width: '1024px', margin: '60px auto' }}>
+    <Box component={'div'} sx={{ width: '816px', margin: '60px auto' }}>
       <Typography
         variant="h3"
         sx={{ fontSize: '25px', fontStyle: 'normal', fontWeight: '700', lineHeight: '120%' }}
